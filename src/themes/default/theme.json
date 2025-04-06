@@ -1,0 +1,149 @@
+{
+    "name": "Default Theme",
+    "author": "OpenCommerce",
+    "version": "1.0.0",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Colors"
+        },
+        {
+            "type": "color",
+            "id": "colors_primary",
+            "label": "Primary Color",
+            "default": "#0f766e"
+        },
+        {
+            "type": "color",
+            "id": "colors_secondary",
+            "label": "Secondary Color",
+            "default": "#2563eb"
+        },
+        {
+            "type": "color",
+            "id": "colors_accent",
+            "label": "Accent Color",
+            "default": "#f59e0b"
+        },
+        {
+            "type": "color",
+            "id": "colors_background",
+            "label": "Background Color",
+            "default": "#ffffff"
+        },
+        {
+            "type": "color",
+            "id": "colors_text",
+            "label": "Text Color",
+            "default": "#1f2937"
+        },
+        {
+            "type": "header",
+            "content": "Typography"
+        },
+        {
+            "type": "font_picker",
+            "id": "font_heading",
+            "label": "Heading Font",
+            "default": "sans-serif"
+        },
+        {
+            "type": "font_picker",
+            "id": "font_body",
+            "label": "Body Font",
+            "default": "sans-serif"
+        },
+        {
+            "type": "range",
+            "id": "font_size_base",
+            "label": "Base Font Size",
+            "min": 12,
+            "max": 18,
+            "step": 1,
+            "default": 16
+        },
+        {
+            "type": "header",
+            "content": "Layout"
+        },
+        {
+            "type": "select",
+            "id": "layout_width",
+            "label": "Page Width",
+            "options": [
+                {
+                    "value": "compact",
+                    "label": "Compact"
+                },
+                {
+                    "value": "standard",
+                    "label": "Standard"
+                },
+                {
+                    "value": "wide",
+                    "label": "Wide"
+                }
+            ],
+            "default": "standard"
+        },
+        {
+            "type": "checkbox",
+            "id": "layout_show_announcement",
+            "label": "Show announcement bar",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "layout_announcement_text",
+            "label": "Announcement text",
+            "default": "Welcome to our store!"
+        },
+        {
+            "type": "header",
+            "content": "Product Grid"
+        },
+        {
+            "type": "range",
+            "id": "products_per_row",
+            "label": "Products per row",
+            "min": 2,
+            "max": 5,
+            "step": 1,
+            "default": 3
+        },
+        {
+            "type": "checkbox",
+            "id": "products_show_vendor",
+            "label": "Show product vendor",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "products_show_price",
+            "label": "Show product price",
+            "default": true
+        },
+        {
+            "type": "header",
+            "content": "Social Media"
+        },
+        {
+            "type": "text",
+            "id": "social_twitter",
+            "label": "Twitter link",
+            "default": ""
+        },
+        {
+            "type": "text",
+            "id": "social_facebook",
+            "label": "Facebook link",
+            "default": ""
+        },
+        {
+            "type": "text",
+            "id": "social_instagram",
+            "label": "Instagram link",
+            "default": ""
+        }
+    ]
+}
