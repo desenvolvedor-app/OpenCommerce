@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
 import { CartWrapper } from '@/components/cart/cart-wrapper';
+import { ThemeStyle } from '@/components/theme/theme-style';
+import { ThemeFonts } from '@/components/theme/theme-fonts';
+import { ThemeLoader } from '@/components/theme/theme-loader';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/providers/auth-provider';
@@ -26,9 +29,25 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                {/* Preload the default font to avoid FOUT */}
+                <link
+                    rel="preload"
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
+                    as="style"
+                />
+                <link
+                    rel="stylesheet"
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
+                />
+                
+                {/* Add preconnect for Google Fonts to improve performance */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            </head>
             <body
                 className={cn(
-                    'min-h-screen font-sans antialiased',
+                    'min-h-screen font-sans antialiased transition-colors',
                     fontSans.variable
                 )}
             >
@@ -39,8 +58,12 @@ export default function RootLayout({
                 >
                     <AuthProvider>
                         <CartWrapper>
-                            {children}
-                            <Toaster position="top-right" richColors />
+                            <ThemeLoader>
+                                <ThemeFonts />
+                                <ThemeStyle />
+                                {children}
+                                <Toaster position="top-right" richColors />
+                            </ThemeLoader>
                         </CartWrapper>
                     </AuthProvider>
                 </ThemeProvider>

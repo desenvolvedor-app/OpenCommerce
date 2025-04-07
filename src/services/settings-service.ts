@@ -45,30 +45,33 @@ export interface PaymentSettings {
     paypalClientId: string;
 }
 
+export interface ThemeSettings {
+    primaryColor: string; // Theme name (default, debut, brooklyn, etc.)
+    allowUserThemeToggle: boolean;
+    customCss?: string; // Optional custom CSS
+    logoUrl?: string; // Optional store logo
+    favicon?: string; // Optional favicon
+}
+
 // Get store settings (tax, currency, etc.)
 export async function getStoreSettings(): Promise<StoreSettings> {
-    try {
-        const docRef = doc(firestore, 'settings', 'store');
-        const docSnap = await getDoc(docRef);
+    const docRef = doc(firestore, 'settings', 'store');
+    const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            return docSnap.data() as StoreSettings;
-        }
-
-        // Return default settings if none exist
-        return {
-            name: 'OpenCommerce',
-            email: 'contact@example.com',
-            phone: '(555) 123-4567',
-            address: '123 Main St, Anytown, ST 12345',
-            currency: 'USD',
-            taxEnabled: true,
-            taxRate: 10, // Default 10% tax rate
-        };
-    } catch (error) {
-        console.error('Error getting store settings:', error);
-        throw error;
+    if (docSnap.exists()) {
+        return docSnap.data() as StoreSettings;
     }
+
+    // Return default settings if none exist
+    return {
+        name: 'My Store',
+        email: 'contact@example.com',
+        phone: '(555) 123-4567',
+        address: '123 Main St, Anytown, ST 12345',
+        currency: 'USD',
+        taxEnabled: true,
+        taxRate: 7.5,
+    };
 }
 
 // Get shipping settings
@@ -110,25 +113,36 @@ export async function getShippingSettings(): Promise<ShippingSettings> {
 
 // Get payment settings
 export async function getPaymentSettings(): Promise<PaymentSettings> {
-    try {
-        const docRef = doc(firestore, 'settings', 'payment');
-        const docSnap = await getDoc(docRef);
+    const docRef = doc(firestore, 'settings', 'payment');
+    const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            return docSnap.data() as PaymentSettings;
-        }
-
-        // Return default payment settings if none exist
-        return {
-            stripeEnabled: true,
-            paypalEnabled: false,
-            stripeKey: '',
-            paypalClientId: '',
-        };
-    } catch (error) {
-        console.error('Error getting payment settings:', error);
-        throw error;
+    if (docSnap.exists()) {
+        return docSnap.data() as PaymentSettings;
     }
+
+    // Return default payment settings if none exist
+    return {
+        stripeEnabled: true,
+        paypalEnabled: false,
+        stripeKey: 'pk_test_',
+        paypalClientId: '',
+    };
+}
+
+// Get theme settings
+export async function getThemeSettings(): Promise<ThemeSettings> {
+    const docRef = doc(firestore, 'settings', 'theme');
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        return docSnap.data() as ThemeSettings;
+    }
+
+    // Return default settings if none exist
+    return {
+        primaryColor: 'default',
+        allowUserThemeToggle: true,
+    };
 }
 
 // Calculate shipping cost based on settings and order details

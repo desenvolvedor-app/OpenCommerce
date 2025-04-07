@@ -20,13 +20,17 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { firestore } from '@/lib/firebase/firebase';
 import {
     getPaymentSettings,
     getStoreSettings,
+    getThemeSettings,
     PaymentSettings,
     StoreSettings,
+    ThemeSettings,
 } from '@/services/settings-service';
+import { storeThemes } from '@/lib/themes';
 
 export default function SettingsPage() {
     const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +55,12 @@ export default function SettingsPage() {
         paypalClientId: '',
     });
 
+    // Theme settings state
+    const [themeSettings, setThemeSettings] = useState<ThemeSettings>({
+        primaryColor: 'default',
+        allowUserThemeToggle: true,
+    });
+
     useEffect(() => {
         async function fetchSettings() {
             try {
@@ -63,6 +73,10 @@ export default function SettingsPage() {
                 // Fetch payment settings using the service
                 const paymentData = await getPaymentSettings();
                 setPaymentSettings(paymentData);
+
+                // Fetch theme settings
+                const themeData = await getThemeSettings();
+                setThemeSettings(themeData);
             } catch (error) {
                 console.error('Error fetching settings:', error);
                 toast.error('Failed to load settings');
@@ -115,6 +129,16 @@ export default function SettingsPage() {
         }
     };
 
+    const handleThemeSettingChange = (
+        name: string,
+        value: string | boolean
+    ) => {
+        setThemeSettings({
+            ...themeSettings,
+            [name]: value,
+        });
+    };
+
     const handleSwitchChange = (
         name: string,
         checked: boolean,
@@ -146,6 +170,12 @@ export default function SettingsPage() {
             // Save payment settings
             await setDoc(doc(firestore, 'settings', 'payment'), {
                 ...paymentSettings,
+                updatedAt: serverTimestamp(),
+            });
+
+            // Save theme settings
+            await setDoc(doc(firestore, 'settings', 'theme'), {
+                ...themeSettings,
                 updatedAt: serverTimestamp(),
             });
 
@@ -306,6 +336,62 @@ export default function SettingsPage() {
                                     />
                                 </div>
                             )}
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Theme Settings</CardTitle>
+                            <CardDescription>
+                                Configure the appearance of your store
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="space-y-4">
+                                <Label>Store Theme</Label>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    {Object.values(storeThemes).map((theme) => (
+                                        <div 
+                                            key={theme.name}
+                                            className={`border rounded-lg p-2 cursor-pointer hover:border-primary transition-colors ${
+                                                themeSettings.primaryColor === theme.name ? 'border-primary ring-2 ring-primary/20' : 'border-border'
+                                            }`}
+                                            onClick={() => handleThemeSettingChange('primaryColor', theme.name)}
+                                        >
+                                            <div 
+                                                className="h-20 w-full rounded mb-2"
+                                                style={{ 
+                                                    background: `hsl(${theme.colors.primary})`,
+                                                }}
+                                            />
+                                            <div className="text-center">
+                                                <div className="font-medium">{theme.label}</div>
+                                                <div className="text-xs text-muted-foreground">{theme.description}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Separator />
+
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label htmlFor="theme-toggle">
+                                        Allow Users to Toggle Dark/Light Mode
+                                    </Label>
+                                    <p className="text-sm text-muted-foreground">
+                                        Let customers switch between dark and light display modes
+                                    </p>
+                                </div>
+                                <Switch
+                                    id="theme-toggle"
+                                    checked={themeSettings.allowUserThemeToggle}
+                                    onCheckedChange={(checked) =>
+                                        handleThemeSettingChange('allowUserThemeToggle', checked)
+                                    }
+                                />
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>

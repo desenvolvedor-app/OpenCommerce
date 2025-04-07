@@ -35,6 +35,7 @@ import { signOut } from '@/lib/firebase/auth';
 import { isAdmin } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useCartStore } from '@/store/cart-store';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
 
 export function SiteHeader() {
     const { theme, setTheme } = useTheme();
@@ -94,11 +95,7 @@ export function SiteHeader() {
     ];
 
     return (
-        <header
-            className={`sticky top-0 z-40 w-full bg-background transition-shadow duration-200 ${
-                scrolled ? 'shadow-md' : 'border-b'
-            }`}
-        >
+        <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
             {/* Announcement banner - optional */}
             <div className="bg-primary text-primary-foreground py-2 text-center text-sm">
                 <p>
@@ -343,7 +340,9 @@ export function SiteHeader() {
                 </nav>
 
                 {/* Right side actions */}
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-4">
+                    {/* Add the theme toggle button */}
+                    <ThemeToggle />
                     {/* Search */}
                     <Button
                         variant="ghost"
@@ -353,33 +352,6 @@ export function SiteHeader() {
                     >
                         <Search className="h-5 w-5" />
                     </Button>
-
-                    {/* Theme Toggle */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                aria-label="Toggle theme"
-                            >
-                                <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                                <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setTheme('light')}>
-                                Light
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setTheme('dark')}>
-                                Dark
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => setTheme('system')}
-                            >
-                                System
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
 
                     {/* Account */}
                     {user ? (
